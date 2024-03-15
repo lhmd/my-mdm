@@ -1,6 +1,6 @@
 task: mdm
 gpus: [0]
-exp_name: 'humanml_trans_enc_512'
+exp_name: 'atm_uestc'
 
 # module path
 network_module: lib.networks.mdm.network
@@ -30,13 +30,13 @@ network:
 
 train_dataset:
     data_root: 'data'
-    name: 'humanml'
+    name: 'uestc'
     split: 'train'
     num_frames: 60
 
 test_dataset:
     data_root: 'data'
-    name: 'humanml'
+    name: 'uestc'
     split: 'test'
     num_frames: 60
 

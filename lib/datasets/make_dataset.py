@@ -30,14 +30,17 @@ def get_dataset_class(name):
     if name == "amass":
         pass
     elif name == "uestc":
-        pass
+        from .mdm.a2m.uestc import UESTC
+        return UESTC
     elif name == "humanact12":
-        pass
+        from .mdm.a2m.humanact12poses import HumanAct12Poses
+        return HumanAct12Poses
     elif name == "humanml":
         from lib.datasets.mdm.humanml.data.dataset import HumanML3D
         return HumanML3D
     elif name == "kit":
-        pass
+        from lib.datasets.mdm.humanml.data.dataset import KIT
+        return KIT
     else:
         raise ValueError(f'Unsupported dataset name [{name}]')
 

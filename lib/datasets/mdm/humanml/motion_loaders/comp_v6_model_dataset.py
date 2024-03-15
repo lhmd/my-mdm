@@ -4,7 +4,7 @@ from lib.datasets.mdm.humanml.networks.trainers import CompTrainerV6
 from torch.utils.data import Dataset, DataLoader
 from os.path import join as pjoin
 from tqdm import tqdm
-from utils import dist_util
+from lib.utils import dist_util
 
 def build_models(opt):
     if opt.text_enc_mod == 'bigru':
