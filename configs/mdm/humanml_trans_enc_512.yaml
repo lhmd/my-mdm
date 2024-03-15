@@ -1,0 +1,64 @@
+task: mdm
+gpus: [0]
+exp_name: 'mdm'
+scene: 'lego'
+
+# module path
+# train_dataset_module: lib.datasets.mdm.synthetic 
+# test_dataset_module: lib.datasets.mdm.synthetic
+network_module: lib.networks.mdm.network
+loss_module: lib.train.losses.mdm
+evaluator_module: lib.evaluators.mdm
+visualizer_module: lib.visualizers.mdm
+
+task_arg:
+    N_rays: 1024 # number of rays per training iteration
+    chunk_size: 4096 # chunkify
+    white_bkgd: True # use white background
+    cascade_samples: [64, 128] # importance sampling, you can set it to [64] for the initial implemetation
+
+network:
+    nerf:
+        W: 256 # width
+        D: 8 # depth
+        V_D: 1 # appearance depth
+    xyz_encoder:
+        type: 'frequency' # positional encoding
+        input_dim: 3
+        freq: 10
+    dir_encoder:
+        type: 'frequency'
+        input_dim: 3
+        freq: 4
+
+train_dataset:
+    data_root: 'data'
+    name: 'humanml'
+    split: 'train'
+    num_frames: 60
+
+test_dataset:
+    data_root: 'data'
+    name: 'humanml'
+    split: 'test'
+    num_frames: 60
+
+train:
+    batch_size: 1
+    lr: 5e-4
+    weight_decay: 0.
+    epoch: 400
+    scheduler:
+        type: 'exponential'
+        gamma: 0.1
+        decay_epochs: 1000
+    num_workers: 4
+
+test:
+    batch_size: 1
+
+ep_iter: 500
+save_ep: 20
+eval_ep: 20       # 10000 iterations
+save_latest_ep: 5 # 2500 iterations
+log_interval: 10

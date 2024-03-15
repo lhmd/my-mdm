@@ -1,0 +1,16 @@
+__pycache__/
+.idea/
+.ipynb_checkpoints/
+*.py[cod]
+*.so
+*.orig
+*.o
+*.json
+*.pth
+*.npy
+*.ipynb
+*.png
+t2m/
+kit/
+glove/
+body_models/smpl/
