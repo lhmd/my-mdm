@@ -8,54 +8,37 @@ loss_module: lib.train.losses.mdm
 evaluator_module: lib.evaluators.mdm
 visualizer_module: lib.visualizers.mdm
 
-task_arg:
-    N_rays: 1024 # number of rays per training iteration
-    chunk_size: 4096 # chunkify
-    white_bkgd: True # use white background
-    cascade_samples: [64, 128] # importance sampling, you can set it to [64] for the initial implemetation
-
-network:
-    nerf:
-        W: 256 # width
-        D: 8 # depth
-        V_D: 1 # appearance depth
-    xyz_encoder:
-        type: 'frequency' # positional encoding
-        input_dim: 3
-        freq: 10
-    dir_encoder:
-        type: 'frequency'
-        input_dim: 3
-        freq: 4
-
-train_dataset:
-    data_root: 'data'
-    name: 'uestc'
-    split: 'train'
-    num_frames: 60
-
-test_dataset:
-    data_root: 'data'
-    name: 'uestc'
-    split: 'test'
-    num_frames: 60
-
-train:
-    batch_size: 1
-    lr: 5e-4
-    weight_decay: 0.
-    epoch: 400
-    scheduler:
-        type: 'exponential'
-        gamma: 0.1
-        decay_epochs: 1000
-    num_workers: 4
-
-test:
-    batch_size: 1
-
-ep_iter: 500
-save_ep: 20
-eval_ep: 20       # 10000 iterations
-save_latest_ep: 5 # 2500 iterations
-log_interval: 10
+arch: trans_enc
+batch_size: 64
+cond_mask_prob: 0.0
+cuda: true
+data_dir: ''
+dataset: uestc
+device: 2
+diffusion_steps: 1000
+emb_trans_dec: false
+eval_batch_size: 32
+eval_during_training: false
+eval_num_samples: 1000
+eval_rep_times: 3
+eval_split: test
+lambda_fc: 1.0
+lambda_rcxyz: 1.0
+lambda_vel: 1.0
+latent_dim: 512
+layers: 8
+log_interval: 1000
+lr: 0.0001
+lr_anneal_steps: 0
+noise_schedule: cosine
+num_frames: 60
+num_steps: 600000
+overwrite: true
+resume_checkpoint: ''
+save_dir: save/atm_uestc
+save_interval: 50000
+seed: 10
+sigma_small: true
+train_platform_type: TensorboardPlatform
+unconstrained: false
+weight_decay: 0.0

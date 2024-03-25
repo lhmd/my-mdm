@@ -1,18 +1,19 @@
 from lib.config import cfg, args
 import numpy as np
 import os
+import json
 ### SCRIPTS BEGINING ###
 def run_dataset():
     from lib.datasets import make_data_loader
     import tqdm
 
-    cfg.train.num_workers = 0
-    data_loader = make_data_loader(cfg, is_train=False)
+    data_loader = make_data_loader(cfg)
     for batch in tqdm.tqdm(data_loader):
         pass
 
 def run_network():
     from lib.networks import make_network
+    from lib.networks import create_gaussian_diffusion
     from lib.datasets import make_data_loader
     from lib.utils.net_utils import load_network
     from lib.utils.data_utils import to_cuda
@@ -20,11 +21,16 @@ def run_network():
     import torch
     import time
 
-    network = make_network(cfg).cuda()
-    load_network(network, cfg.trained_model_dir, epoch=cfg.test.epoch)
-    network.eval()
+    # __import__('ipdb').set_trace()
 
-    data_loader = make_data_loader(cfg, is_train=False)
+    data_loader = make_data_loader(cfg)
+
+    network = make_network(cfg, data_loader).cuda()
+    # load_network(network, cfg.trained_model_dir, epoch=cfg.test.epoch)
+    # network.eval()
+
+    diffusion = create_gaussian_diffusion(cfg)
+
     total_time = 0
     for batch in tqdm.tqdm(data_loader):
         batch = to_cuda(batch)

@@ -44,17 +44,7 @@ def get_dataset_class(name):
     else:
         raise ValueError(f'Unsupported dataset name [{name}]')
 
-def make_dataset(cfg, is_train=True, hml_mode='train'):
-    if is_train:
-        args = cfg.train_dataset
-        # module = cfg.train_dataset_module
-        split = 'train'
-    else:
-        args = cfg.test_dataset
-        # module = cfg.test_dataset_module
-        split = 'test'
-    name = args.name
-    num_frames = args.num_frames
+def make_dataset(name, num_frames, split='train', hml_mode='train'):
     DATA = get_dataset_class(name)
     if name in ["humanml", "kit"]:
         dataset = DATA(split=split, num_frames=num_frames, mode=hml_mode)
@@ -99,14 +89,13 @@ def worker_init_fn(worker_id):
     np.random.seed(worker_id + (int(round(time.time() * 1000) % (2**16))))
 
 
-def make_data_loader(cfg, is_train=True, is_distributed=False, max_iter=-1, hml_mode='train'):
-    if is_train:
-        batch_size = cfg.train.batch_size
-    else:
-        batch_size = cfg.test.batch_size
+def make_data_loader(cfg, is_distributed=False, max_iter=-1, hml_mode='train'):
+    batch_size = cfg.batch_size
+    name = cfg.dataset
+    num_frames = cfg.num_frames
     
-    dataset = make_dataset(cfg, is_train, hml_mode=hml_mode)
-    collator = make_collator(cfg, is_train, hml_mode=hml_mode)
+    dataset = make_dataset(name, num_frames, hml_mode=hml_mode)
+    collator = make_collator(name, hml_mode=hml_mode)
     data_loader = DataLoader(dataset,
                              batch_size=batch_size,
                              shuffle=True,
@@ -115,3 +104,14 @@ def make_data_loader(cfg, is_train=True, is_distributed=False, max_iter=-1, hml_
                              collate_fn=collator)
 
     return data_loader
+
+def get_data_loader(name, batch_size, num_frames, split='train', hml_mode='train'):
+    dataset = make_dataset(name, num_frames, split, hml_mode)
+    collate = make_collator(name, hml_mode)
+
+    loader = DataLoader(
+        dataset, batch_size=batch_size, shuffle=True,
+        num_workers=8, drop_last=True, collate_fn=collate
+    )
+
+    return loader

@@ -7,12 +7,7 @@ from lib.datasets.mdm.tensors import t2m_collate
 
 _collators = {}
 
-def make_collator(cfg, is_train, hml_mode='train'):
-    if is_train:
-        args = cfg.train_dataset
-    else:
-        args = cfg.test_dataset
-    name = args.name
+def make_collator(name, hml_mode='train'):
     
     if hml_mode == 'gt':
         from lib.datasets.mdm.humanml.data.dataset import collate_fn as t2m_eval_collate
