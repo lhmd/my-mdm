@@ -14,7 +14,7 @@ cond_mask_prob: 0.0
 cuda: true
 data_dir: ""
 dataset: humanact12
-device: 4
+device: 6
 diffusion_steps: 1000
 emb_trans_dec: false
 eval_batch_size: 32
